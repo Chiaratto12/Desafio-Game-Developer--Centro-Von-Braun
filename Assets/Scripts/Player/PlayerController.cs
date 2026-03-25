@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2Int _gridPosition;
     private bool _isMoving = false;
+    [SerializeField]
     private float _currentSpeedMultiplier = 1f;
 
     private Camera _camera;

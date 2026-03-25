@@ -36,6 +36,8 @@ public class TrafficController : MonoBehaviour
         status.weather = "sunny";
         status.averageSpeed = 60.0f;
         ApplyStatus(status);
+        WeatherController weatherController = GetComponent<WeatherController>();
+        weatherController.ApplyWeather("clouded");
     }
 
     /// <summary>
