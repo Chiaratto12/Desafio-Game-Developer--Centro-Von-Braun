@@ -38,6 +38,10 @@ public class TrafficController : MonoBehaviour
         ApplyStatus(status);
     }
 
+    /// <summary>
+    /// Aplica o status nos veículos e inicia o loop de criar carros
+    /// </summary>
+    /// <param name="status">Status para os veículos</param>
     public void ApplyStatus(Status status)
     {
         _spawnInterval = 1f / status.vehicleDensity;
@@ -47,6 +51,10 @@ public class TrafficController : MonoBehaviour
         _spawnCoroutine = StartCoroutine(SpawnLoop());
     }
 
+    /// <summary>
+    /// Loop para criar carros em um certo intervalo
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SpawnLoop()
     {
         while (true)
@@ -56,6 +64,9 @@ public class TrafficController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Cria um carro em uma linha aleatória escolhida  
+    /// </summary>
     private void SpawnInRandomLane()
     {
         Lane lane = lanes[Random.Range(0, lanes.Length)];
@@ -67,6 +78,10 @@ public class TrafficController : MonoBehaviour
         ActiveVehicles.Add(mover);
     }
 
+    /// <summary>
+    /// Remove o veículo dos veículos ativos
+    /// </summary>
+    /// <param name="vehicle">Veículo para remover</param>
     public void UnregisterVehicle(VehicleController vehicle)
     {
         ActiveVehicles.Remove(vehicle);

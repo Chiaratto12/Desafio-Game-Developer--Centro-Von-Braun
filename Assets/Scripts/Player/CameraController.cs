@@ -42,7 +42,11 @@ public class CameraController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, _targetPosition, smoothSpeed);
     }
 
-
+    /// <summary>
+    /// Pega a posição desejada para a nova posiçao da camêra
+    /// </summary>
+    /// <param name="targetY">Posição do alvo no eixo Y</param>
+    /// <returns></returns>
     private Vector3 GetDesiredPosition(float targetY)
     {
         return new Vector3(
@@ -52,12 +56,14 @@ public class CameraController : MonoBehaviour
         );
     }
 
-
+    /// <summary>
+    /// Reseta a posição da câmera
+    /// </summary>
     public void ResetProgress()
     {
         if (player == null) return;
 
-        _maxPlayerY = player.position.z;
+        _maxPlayerY = player.position.y;
         transform.position = GetDesiredPosition(_maxPlayerY);
     }
 }
