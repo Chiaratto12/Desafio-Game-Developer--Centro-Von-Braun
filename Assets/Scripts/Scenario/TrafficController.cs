@@ -29,17 +29,6 @@ public class TrafficController : MonoBehaviour
 
     private void Awake() => Instance = this;
 
-    private void Start()
-    {
-        Status status = new Status();
-        status.vehicleDensity = 0.5f;
-        status.weather = "sunny";
-        status.averageSpeed = 60.0f;
-        ApplyStatus(status);
-        WeatherController weatherController = GetComponent<WeatherController>();
-        weatherController.ApplyWeather("clouded");
-    }
-
     /// <summary>
     /// Aplica o status nos veículos e inicia o loop de criar carros
     /// </summary>
@@ -87,5 +76,30 @@ public class TrafficController : MonoBehaviour
     public void UnregisterVehicle(VehicleController vehicle)
     {
         ActiveVehicles.Remove(vehicle);
+    }
+
+    /// <summary>
+    /// Para de criar novos veículos
+    /// </summary>
+    public void StopSpawning()
+    {
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine);
+            _spawnCoroutine = null;
+        }
+    }
+
+    /// <summary>
+    /// Remove todos so veículos ativos
+    /// </summary>
+    public void ClearAllVehicles()
+    {
+        foreach (var vehicle in ActiveVehicles)
+        {
+            if (vehicle != null)
+                Destroy(vehicle.gameObject);
+        }
+        ActiveVehicles.Clear();
     }
 }

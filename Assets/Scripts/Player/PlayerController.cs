@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public float cellSize = 1f;
     public float moveTime = 0.15f;
 
+    private Vector2 _startPositionGrid;
     private Vector2Int _gridPosition;
     private bool _isMoving = false;
     [SerializeField]
@@ -14,14 +15,17 @@ public class PlayerController : MonoBehaviour
 
     private Camera _camera;
 
+    private bool _inputEnabled = false;
+
     private void Start()
     {
         _camera = Camera.main;
+        _startPositionGrid = (Vector2)transform.position;
     }
 
     private void Update()
     {
-        if (_isMoving) return;
+        if (!_inputEnabled || _isMoving) return;
 
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -36,6 +40,13 @@ public class PlayerController : MonoBehaviour
                 direction = h > 0 ? Vector2Int.right : Vector2Int.left;
 
             TryMove(direction);
+        }
+
+        CheckCollision();
+
+        if(_gridPosition.y >= GameManager.Instance.goalLine.y)
+        {
+            GameManager.Instance.TriggerWin();
         }
     }
 
@@ -90,6 +101,15 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
+    /// Retorna posição atual do jogador no grid
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetActualGrid()
+    {
+        return GridToWorld(_gridPosition);
+    }
+
+    /// <summary>
     /// Seta o multiplicador de velocidade baseado no tipo de clima
     /// </summary>
     /// <param name="weather">Clima setado</param>
@@ -114,5 +134,37 @@ public class PlayerController : MonoBehaviour
     private bool IsWithinBounds(Vector2Int cell)
     {
         return cell.x >= -9 && cell.x < 10 && cell.y >= -4;
+    }
+
+    /// <summary>
+    /// Chega colisão com outros veículos
+    /// </summary>
+    private void CheckCollision()
+    {
+        foreach (var vehicle in TrafficController.Instance.ActiveVehicles)
+        {
+            if (vehicle == null) continue;
+
+            if (vehicle.CurrentCell == _gridPosition)
+            {
+                GameManager.Instance.TriggerGameOver();
+                return;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Seta o valor _inputEnable no jogador
+    /// </summary>
+    /// <param name="enabled">Booleano para setar como novo valor</param>
+    public void SetInputEnabled(bool enabled)
+    {
+        _inputEnabled = enabled;
+    }
+
+    public void ResetPosition ()
+    {
+        _gridPosition = Vector2Int.RoundToInt(_startPositionGrid);
+        transform.position = (Vector3)_startPositionGrid;
     }
 }

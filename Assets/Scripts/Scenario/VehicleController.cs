@@ -24,10 +24,12 @@ public class VehicleController : MonoBehaviour
 
     private void Update()
     {
-        transform.Translate(_direction * _speed * Time.deltaTime);
+        transform.Translate(_direction * _speed * Time.deltaTime, Space.World);
 
         if (HasReachedDespawn())
+        {
             Destroy(gameObject);
+        }
     }
 
     /// <summary>
@@ -39,8 +41,16 @@ public class VehicleController : MonoBehaviour
         return Vector3.Dot(_direction, _despawnPosition - transform.position) <= 0;
     }
 
+    /// <summary>
+    /// Célula atual que o veículo está
+    /// </summary>
     public Vector2Int CurrentCell => new Vector2Int(
         Mathf.RoundToInt(transform.position.x / _cellSize),
-        Mathf.RoundToInt(transform.position.z / _cellSize)
+        Mathf.RoundToInt(transform.position.y / _cellSize)
     );
+
+    private void OnDestroy()
+    {
+        TrafficController.Instance?.UnregisterVehicle(this);
+    }
 }
