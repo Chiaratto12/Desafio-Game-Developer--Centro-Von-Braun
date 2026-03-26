@@ -132,7 +132,7 @@ que predições de níveis passados vazem para o estado atual.
 - Efeitos visuais de clima (partículas de chuva, névoa) não implementados
   por serem opcionais no escopo do protótipo — os multiplicadores de
   gameplay estão funcionais.
-- A detecção de vitória é colocada no prórpio script — em níveis futuros
+- A detecção de vitória é colocada no própio script — em níveis futuros
  isso poderia ser configurável via API.
 
 ---
